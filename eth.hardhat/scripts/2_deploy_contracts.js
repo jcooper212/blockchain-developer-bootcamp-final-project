@@ -20,11 +20,15 @@ async function main() {
   await dpt.deployed();
 
   let fileLoc = process.env.DAOPAYTREASURY_ROOT;
-  fileLoc += '/DAOPAYTREASURY_ContractAddress';
-  console.log("DaoPayTreasury deployed to:", dpt.address);
+  fileLoc += '/DAOPAYTREASURY_ContractAddress.json';
+  let jsonStr = '{"DAOPAYTREASURY_ContractAddress": "';
+  jsonStr += dpt.address;
+  jsonStr += '"}'
+
+  console.log("DaoPayTreasury deployed to:", jsonStr);
 
 
-  fs.writeFileSync(fileLoc, Buffer(dpt.address), function(err) {
+  fs.writeFileSync(fileLoc, Buffer(jsonStr), function(err) {
       if(err) {
           return console.log(err);
       }

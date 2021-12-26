@@ -18,13 +18,11 @@ DAOPayTreasury specifically deals with the Treasury Payments challenge of DAOs. 
 - The worksteram owner is the only one that is Authorized to approve the request
 - The DAO owner (one who deployed the contract) is the only one that can make a payment
 
-## contracts
+## Contracts
 - DAOToken - The native token of the DAO
 - DaoPayTreasury - The main DAOPayTreasury governence contract - this also acts as a factory contract to produce new DAOWorkstreams dynamically requested by the daoOwner
 - DaoWorkstream - This is a workstream which will hold a list of payment requests for the contributors
 
-## Deployed contract on rinkeby
-0x0E570d2E9c9fFECC7B03aCDCc007Aeb38283935A
 
 ## ENV VARIABLES (REQUIRED to be set prior to running)
 - ETH_WALLET_MNEMONIC=...privatekey mnemonic
@@ -45,12 +43,12 @@ Here is a list of important folders and their description.
 | `pages/workstreams`          | Workstream pages                                       |
 
 ## QUICK Start with limited functionality (cause you will not be the daoOwner)
-setup ENV VARS listed above
-cd PROJECT_ROOT
-npm run dev
+- setup ENV VARS listed above
+- cd PROJECT_ROOT
+- npm run dev
 
 ## Start with all functionality
-setup ENV VARS listed above
-cd PROJECT_ROOT/eth.hardhat
-hh run scripts/2_deploy_contracts.js --network rinkeby
-npm run dev
+- setup ENV VARS listed above
+- cd PROJECT_ROOT/eth.hardhat
+- hh run scripts/2_deploy_contracts.js --network rinkeby
+- npm run dev

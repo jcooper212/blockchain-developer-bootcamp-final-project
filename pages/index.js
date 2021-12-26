@@ -53,8 +53,9 @@ class WorkstreamIndex extends Component {
     return(
       <Layout>
       <div>
-      <h3> DAO Balance is {this.props.daoBal} </h3>
-      <h3></h3>
+      <h5> DAO Balance is {this.props.daoBal} </h5>
+      <div></div>
+
       <h3>Current Workstreams</h3>
       <Link route="/workstreams/new">
       <a>
@@ -64,6 +65,7 @@ class WorkstreamIndex extends Component {
     {this.renderWorktreams()}
     </div>
     </Layout>
+
   );
   }
 }
