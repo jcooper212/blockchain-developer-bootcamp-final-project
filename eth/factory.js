@@ -1,11 +1,14 @@
 import web3 from './web3';
 //import DaoPayTreasury from './build/contracts/DaoPayTreasury.json';
 import DaoPayTreasury from '../eth.hardhat/artifacts/contracts/DaoPayTreasury.sol/DaoPayTreasury.json';
+import DaoPayTreasury_address from '../DAOPAYTREASURY_ContractAddress.json';
 
+
+console.log('contract address is : ',DaoPayTreasury_address.DAOPAYTREASURY_ContractAddress);
 
 const instance = new web3.eth.Contract(
   DaoPayTreasury.abi,
-  '0xd5eac85106BA395dE63B3b005f4dd9bEB9e02ee7');
+  DaoPayTreasury_address.DAOPAYTREASURY_ContractAddress);
 //  '0x54e889149FD3FAdA59d1136576c0338365B50D21');
 //  '0x0E570d2E9c9fFECC7B03aCDCc007Aeb38283935A');
 //  '0xD5f834b6AB48dE8b8D695D2fFD6f0380B9F97cB5');

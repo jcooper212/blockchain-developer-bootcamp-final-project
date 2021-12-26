@@ -71,7 +71,7 @@ class RequestIndex extends Component {
             {this.renderRow()}
           </Body>
         </Table>
-        <div> Found {this.props.requestCount}  requests / with DAO Balance {this.props.daoBal} owner </div>
+        <div> Found {this.props.requestCount}  requests. The DAO Balance is: {this.props.daoBal}  </div>
       </Layout>
     );
   }

@@ -109,6 +109,10 @@ contract DaoWorkstream {
         require(msg.sender == daoOwner,'only dao owner');
         _;
     }
+    modifier authorizeApproval(){
+        require(msg.sender == workstreamOwner,'only workstreamowner can authorize approval');
+        _;
+    }
 
     modifier isApproved(bool _approved){
       require(_approved == true, 'NOT approved');
@@ -174,7 +178,7 @@ contract DaoWorkstream {
         requests.push(newReq);
         emit NewRequest(description, value);
     }
-    function approveRequest(uint index) restricted() external {
+    function approveRequest(uint index) authorizeApproval() external {
         requests[index].approved = true;
         //pay the recipeient
         //Upon success

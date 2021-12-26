@@ -473,8 +473,8 @@
       ]
     },
     "/Users/jcooper/py/crypto/consensys/blockchain-developer-bootcamp-final-project/eth.hardhat/contracts/DaoPayTreasury.sol": {
-      "lastModificationDate": 1640362980904,
-      "contentHash": "9146e8f7965b783c624f8e926f5a34b5",
+      "lastModificationDate": 1640522338981,
+      "contentHash": "bf95afe7f816d0b1ec9ad9632d25fbad",
       "sourceName": "contracts/DaoPayTreasury.sol",
       "solcConfig": {
         "version": "0.8.0",
