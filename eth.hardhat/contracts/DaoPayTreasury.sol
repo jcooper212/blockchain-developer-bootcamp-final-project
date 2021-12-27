@@ -1,4 +1,4 @@
-pragma solidity =0.8.10;
+pragma solidity =0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import "hardhat/console.sol";
@@ -13,6 +13,7 @@ contract DAOToken is ERC20 {
     admin = msg.sender;
   }
 
+  //mint an amoutn and assign to the to address
   function mint(address to, uint amount) external{
     require(msg.sender == admin, 'only admin');
     _mint(to, amount);
@@ -43,7 +44,7 @@ contract DaoPayTreasury {
         daoToken = new DAOToken();
         daoToken.mint(owner, supplyDaoToken);
     }
-    //Create a DaoWorkstream
+    //Create a new DaoWorkstream
     function createDaoWorkstream(string memory _workstreamName, address _workstreamOwner) restricted() external returns (address) {
         DaoWorkstream newWk = new DaoWorkstream(_workstreamName, owner, _workstreamOwner, payable(address(daoToken)));
         listDaoWorkstreams.push(address(newWk));
@@ -65,11 +66,14 @@ contract DaoPayTreasury {
         return (address(daoToken), address(this), daoToken.balanceOf(owner));
     }
 
+    //Pay the contributor from the DAO Account. Params are the contributor address and amount
     function payContributor(address payable to, uint amount) restricted() external  {
       bool sent = daoToken.transferFrom(owner, to, amount);
       require(sent, "Token transfer failed");
       emit PaidContributor(to, amount);
     }
+
+    //Convenience function to combine the Paying the contributor and the workstream payment statuses
     function payContributorRequest(address workstreamAddr, uint index) restricted() external  {
       DaoWorkstream dw = DaoWorkstream(workstreamAddr);
       bool sent = daoToken.transferFrom(owner, dw.getRequestRecipient(index), dw.getRequestValue(index));
@@ -137,6 +141,7 @@ contract DaoWorkstream {
       return workstreamName;
     }
 
+    //execute a payment request to the contributor
     function execPayment(address payable to, uint amount)  public
     {
         IERC20(daoToken).transferFrom(daoOwner, to, amount);
@@ -144,11 +149,14 @@ contract DaoWorkstream {
     function balance() external view returns(uint){
       return (IERC20(daoToken).balanceOf(daoOwner));
     }
+
+    //get Summary of the workstream
     function getSummary() external view returns (string memory, address, uint, uint, uint, uint) {
       return (
         workstreamName, workstreamOwner, pendingRequestCount, requests.length, pendingBalance, totalBalance
       );
     }
+    //get Summary of the request at index i
     function getRequest(uint i) external view returns (uint id, string memory, address, uint, bool, bool) {
       return (
         requests[i].id, requests[i].description, requests[i].recipient, requests[i].value, requests[i].approved, requests[i].paid
@@ -163,6 +171,8 @@ contract DaoWorkstream {
     function getRequestValue(uint i) external  view returns (uint){
       return (requests[i].value);
     }
+
+    //create a new payment request
     function createRequest(string memory description, uint value, address payable recipient) public  {
         Request memory newReq = Request({
            id: requests.length,
@@ -178,6 +188,8 @@ contract DaoWorkstream {
         requests.push(newReq);
         emit NewRequest(description, value);
     }
+
+    //Approve a request. Can only be done by the workstream lead as they have knowledge of the contribution
     function approveRequest(uint index) authorizeApproval() external {
         requests[index].approved = true;
         //pay the recipeient
@@ -187,6 +199,8 @@ contract DaoWorkstream {
         emit ApprovedRequest(requests[index].description, requests[index].value);
 
     }
+
+    //Pay the request at index i - only if already approved by the workstream lead
     function payRequest(uint index) isApproved(requests[index].approved) external returns (bool){
         requests[index].paid = true;
         //pay the recipeient
@@ -196,6 +210,8 @@ contract DaoWorkstream {
         emit PaidRequest(requests[index].description, requests[index].value);
         return true;
     }
+
+    //Convenience function which combines paying the contributor & also executes the payment
     function payExecRequest(uint index) isApproved(requests[index].approved) external returns (bool){
         requests[index].paid = true;
         //pay the recipeient

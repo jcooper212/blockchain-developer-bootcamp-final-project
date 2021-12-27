@@ -8,7 +8,7 @@
     "dev_without_Serverjs": "next dev",
     "dev": "node server.js",
     "heroku-postbuild": "npm run build",
-    "start": "npm run dev"
+    "start": "next start"
   },
   "author": "",
   "license": "ISC",
