@@ -3,15 +3,7 @@
 ## Design Pattern #1
 ## Inter-Contract Execution (Calling functions in external contracts) Inter-Contract Execution, Part 1 and Part 2
 
-This is exhibited in the following solidity function:
-
-function createDaoWorkstream(string memory _workstreamName, address _workstreamOwner) restricted() external returns (address) {
-    DaoWorkstream newWk = new DaoWorkstream(_workstreamName, owner, _workstreamOwner, payable(address(daoToken)));
-    listDaoWorkstreams.push(address(newWk));
-    listDaoWorkstreamNames.push(_workstreamName);
-    emit NewWorkstream(_workstreamName);
-    return address(newWk);
-}
+This is exhibited in the following solidity function createDaoWorkstream of DaoPayTreasury contract: 
 
 
 ##Design Pattern #2
