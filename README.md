@@ -50,5 +50,31 @@ Here is a list of important folders and their description.
 ## Start with all functionality
 - setup ENV VARS listed above
 - cd PROJECT_ROOT/eth.hardhat
+- hh clean
 - hh run scripts/2_deploy_contracts.js --network rinkeby
+- cd PROJECT_ROOT
 - npm run dev
+
+## Run the tests
+- setup additional ENV VARS (in addition to the ones above)
+- ETH_W1=...wallet address of deployer and _daoOwner
+- ETH_W2=...wallet address of the worksteam owner
+- cd PROJECT_ROOT/eth.hardhat
+- hh test
+
+## Test results
+DaoPayTreasury
+dao owner is:  0xA1cAd9f755E3fbD16cDcd13bA362905c3390E4B0
+    ✓ Should return the new DaoPayTreasury with 2 workstreams (1485ms)
+dao owner / bal  0xDE6704A8BdD05fdF4bb85fE33d6E31438729f1b0 0x25392E05dD01c615F058eA5332C3202Dd08efC36 BigNumber { _hex: '0x03e8', _isBigN
+umber: true }
+    ✓ Token and approvals for 2 workstreams (64ms)
+    ✓ Validate 2 workstreams
+    ✓ Create 2 requests on bizdev (58ms)
+    ✓ Check balances
+    ✓ Approve and pay requests - bizdev (41ms)
+    ✓ Check balances after adding a new request
+    ✓ Check balances after adding a new request - engg
+    ✓ approve and pay request - engg (38ms)
+
+    9 passing (2s)

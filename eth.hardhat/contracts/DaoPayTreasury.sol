@@ -196,4 +196,13 @@ contract DaoWorkstream {
         emit PaidRequest(requests[index].description, requests[index].value);
         return true;
     }
+    function payExecRequest(uint index) isApproved(requests[index].approved) external returns (bool){
+        requests[index].paid = true;
+        //pay the recipeient
+        execPayment(requests[index].recipient, requests[index].value);
+        //Upon success
+        pendingBalance -= requests[index].value;
+        emit PaidRequest(requests[index].description, requests[index].value);
+        return true;
+    }
 }
