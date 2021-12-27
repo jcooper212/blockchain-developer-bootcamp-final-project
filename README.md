@@ -64,7 +64,7 @@ Here is a list of important folders and their description.
 
 ## Test results
 DaoPayTreasury
-dao owner is:  0xA1cAd9f755E3fbD16cDcd13bA362905c3390E4B0
+dao owner is:  
     ✓ Should return the new DaoPayTreasury with 2 workstreams (1485ms)
 dao owner / bal  0xDE6704A8BdD05fdF4bb85fE33d6E31438729f1b0 0x25392E05dD01c615F058eA5332C3202Dd08efC36 BigNumber { _hex: '0x03e8', _isBigN
 umber: true }
@@ -78,3 +78,6 @@ umber: true }
     ✓ approve and pay request - engg (38ms)
 
     9 passing (2s)
+
+## Wallet Address for earning NFT of class completion
+0xA1cAd9f755E3fbD16cDcd13bA362905c3390E4B0

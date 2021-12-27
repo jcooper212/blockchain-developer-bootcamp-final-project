@@ -6,7 +6,9 @@
   "scripts": {
     "test": "mocha",
     "dev_without_Serverjs": "next dev",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "heroku-postbuild": "npm run build",
+    "start": "node server.js -p $PORT"
   },
   "author": "",
   "license": "ISC",

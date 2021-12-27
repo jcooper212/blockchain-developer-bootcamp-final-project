@@ -1,0 +1,2 @@
+contract addr: 0x40db4F802ff3A0f1dA136542A6CB3d72273FD8c3
+network: rinkeby
