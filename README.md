@@ -57,7 +57,7 @@ Here is a list of important folders and their description.
 - npm run dev
 
 ## Run the tests
-- setup additional ENV VARS (in addition to the ones above)
+- steps to run the test require additional 2 environment variables setup
 - ETH_W1=...wallet address of deployer and _daoOwner
 - ETH_W2=...wallet address of the worksteam owner
 - cd PROJECT_ROOT/eth.hardhat
@@ -80,8 +80,16 @@ umber: true }
 
     9 passing (2s)
 
+## Roles
+- DAO Owner - Creator & Deployer of DaoPayTreasury contract (only role that can create a worksteram & make payments in DAOT)
+- Workstream Owner - Will be assigned by the DAO Owner when a workstream is created. (only role that can approve a payment request from a contributor)
+- ALL - Can view the entire application. Anyone can also create a payment request
+
 ## Wallet Address for earning NFT of class completion
-0xA1cAd9f755E3fbD16cDcd13bA362905c3390E4B0
+- 0xA1cAd9f755E3fbD16cDcd13bA362905c3390E4B0
+
+## Link to live app (please note - since you are not the DAO Owner or Worktraem owner, you can navigate & view app & only request a payment)
+- https://daopaytreasury.pagekite.me/
 
 ## Loom screencast recording of DaoPayTreasury project
-https://www.loom.com/share/1e3889c4171449b8a1b77fd124fdd860
+- https://www.loom.com/share/1e3889c4171449b8a1b77fd124fdd860
