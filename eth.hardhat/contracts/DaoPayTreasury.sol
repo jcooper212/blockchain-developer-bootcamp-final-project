@@ -3,9 +3,13 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import "hardhat/console.sol";
 
+/// @title DaoPayTreasury - A payment system for DAO Contributors
+/// @author Jamshed Cooper
+/// @notice We have a DAOToken (ERC20 for the DAO Project), The DaoPayTreasury and the DaoWorkstream Contracts
+/// @dev Dynamically generated and deployed DAOWorkstreams. DAOToken is created with fixed supply at DaoPayTreasury contract initiation
 
 
-//The DAO Token ERC20 contract (DAOT) which will be used to pay contributors and suppliers of the DAO
+/// @notice The DAO Token ERC20 contract (DAOT) which will be used to pay contributors and suppliers of the DAO
 contract DAOToken is ERC20 {
   address public admin;
 
@@ -13,14 +17,14 @@ contract DAOToken is ERC20 {
     admin = msg.sender;
   }
 
-  //mint an amoutn and assign to the to address
+/// @notice Mint an amoutn and assign to the to address
   function mint(address to, uint amount) external{
     require(msg.sender == admin, 'only admin');
     _mint(to, amount);
   }
 }
 
-//The DaoPayTreasury Factory which is able to create DaoWorkstreams and authorize payment to contributors from the community Treasury in DAOToken (DAOT)
+/// @notice The DaoPayTreasury Factory which is able to create DaoWorkstreams and authorize payment to contributors from the community Treasury in DAOToken (DAOT)
 contract DaoPayTreasury {
     address public owner;
     uint public supplyDaoToken;
@@ -28,11 +32,11 @@ contract DaoPayTreasury {
     address [] public listDaoWorkstreams;
     string  [] public listDaoWorkstreamNames;
 
-    //Events
+/// @notice Events
     event NewWorkstream(string str);
     event PaidContributor(address rcp, uint amount);
 
-    //modifiers
+/// @notice modifiers
     modifier restricted(){
         require(msg.sender == owner,'only admin');
         _;
@@ -44,7 +48,8 @@ contract DaoPayTreasury {
         daoToken = new DAOToken();
         daoToken.mint(owner, supplyDaoToken);
     }
-    //Create a new DaoWorkstream
+    /// @notice Create a new DaoWorkstream
+    /// @dev requires a name, and owner as params. Returns the new workstream address
     function createDaoWorkstream(string memory _workstreamName, address _workstreamOwner) restricted() external returns (address) {
         DaoWorkstream newWk = new DaoWorkstream(_workstreamName, owner, _workstreamOwner, payable(address(daoToken)));
         listDaoWorkstreams.push(address(newWk));
@@ -66,14 +71,14 @@ contract DaoPayTreasury {
         return (address(daoToken), address(this), daoToken.balanceOf(owner));
     }
 
-    //Pay the contributor from the DAO Account. Params are the contributor address and amount
+    /// @notice Pay the contributor from the DAO Account. Params are the contributor address and amount
     function payContributor(address payable to, uint amount) restricted() external  {
       bool sent = daoToken.transferFrom(owner, to, amount);
       require(sent, "Token transfer failed");
       emit PaidContributor(to, amount);
     }
 
-    //Convenience function to combine the Paying the contributor and the workstream payment statuses
+    /// @notice Convenience function to combine the Paying the contributor and the workstream payment statuses
     function payContributorRequest(address workstreamAddr, uint index) restricted() external  {
       DaoWorkstream dw = DaoWorkstream(workstreamAddr);
       bool sent = daoToken.transferFrom(owner, dw.getRequestRecipient(index), dw.getRequestValue(index));
@@ -83,7 +88,7 @@ contract DaoPayTreasury {
     }
 }
 
-//DaoWorkstream is the contract which holds the requests from contributors for payment and approves them to be paid from community treasury in DAOToken (DAOT)
+/// @notice DaoWorkstream is the contract which holds the requests from contributors for payment and approves them to be paid from community treasury in DAOToken (DAOT)
 contract DaoWorkstream {
     address workstreamOwner;
     address daoOwner;
@@ -103,12 +108,12 @@ contract DaoWorkstream {
     uint public pendingBalance;
     uint public pendingRequestCount;
 
-    //Events
+    /// @notice Events
     event NewRequest(string str, uint value);
     event ApprovedRequest(string str, uint value);
     event PaidRequest(string str, uint value);
 
-    //Modifiers
+    /// @notice Modifiers
     modifier restricted(){
         require(msg.sender == daoOwner,'only dao owner');
         _;
@@ -141,7 +146,7 @@ contract DaoWorkstream {
       return workstreamName;
     }
 
-    //execute a payment request to the contributor
+    /// @notice execute a payment request to the contributor
     function execPayment(address payable to, uint amount)  public
     {
         IERC20(daoToken).transferFrom(daoOwner, to, amount);
@@ -150,13 +155,13 @@ contract DaoWorkstream {
       return (IERC20(daoToken).balanceOf(daoOwner));
     }
 
-    //get Summary of the workstream
+    /// @notice Returns all of the details of the workstream
     function getSummary() external view returns (string memory, address, uint, uint, uint, uint) {
       return (
         workstreamName, workstreamOwner, pendingRequestCount, requests.length, pendingBalance, totalBalance
       );
     }
-    //get Summary of the request at index i
+    /// @notice  Returns all of the details of the Payment request at index i
     function getRequest(uint i) external view returns (uint id, string memory, address, uint, bool, bool) {
       return (
         requests[i].id, requests[i].description, requests[i].recipient, requests[i].value, requests[i].approved, requests[i].paid
@@ -172,7 +177,8 @@ contract DaoWorkstream {
       return (requests[i].value);
     }
 
-    //create a new payment request
+    /// @notice Creates a new payment requests
+    /// @dev params are description, value of pauyment and address of contributor
     function createRequest(string memory description, uint value, address payable recipient) public  {
         Request memory newReq = Request({
            id: requests.length,
@@ -189,7 +195,8 @@ contract DaoWorkstream {
         emit NewRequest(description, value);
     }
 
-    //Approve a request. Can only be done by the workstream lead as they have knowledge of the contribution
+    /// @notice Approve a request for a payment.
+    /// @dev Can only be done by the workstream lead as they have knowledge of the contribution
     function approveRequest(uint index) authorizeApproval() external {
         requests[index].approved = true;
         //pay the recipeient
@@ -200,7 +207,8 @@ contract DaoWorkstream {
 
     }
 
-    //Pay the request at index i - only if already approved by the workstream lead
+    /// @notice Pay a request for a payment at index i.
+    /// @dev Can only be done if Approved
     function payRequest(uint index) isApproved(requests[index].approved) external returns (bool){
         requests[index].paid = true;
         //pay the recipeient
@@ -211,7 +219,7 @@ contract DaoWorkstream {
         return true;
     }
 
-    //Convenience function which combines paying the contributor & also executes the payment
+    /// @notice Convenience function which combines paying the contributor & also executes the payment
     function payExecRequest(uint index) isApproved(requests[index].approved) external returns (bool){
         requests[index].paid = true;
         //pay the recipeient
