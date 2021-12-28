@@ -23,6 +23,14 @@ DAOPayTreasury specifically deals with the Treasury Payments challenge of DAOs. 
 - DaoPayTreasury - The main DAOPayTreasury governence contract - this also acts as a factory contract to produce new DAOWorkstreams dynamically requested by the daoOwner
 - DaoWorkstream - This is a workstream which will hold a list of payment requests for the contributors
 
+## Pre-requisites
+- Node.js
+- Hardhat
+- npm
+- React
+- next-routes
+- web3
+
 
 ## ENV VARIABLES (REQUIRED to be set prior to running)
 - ETH_WALLET_MNEMONIC=...privatekey mnemonic
@@ -56,6 +64,12 @@ Here is a list of important folders and their description.
 - cd PROJECT_ROOT
 - npm run dev
 
+## Deploy command
+- setup ENV VARS listed above
+- cd PROJECT_ROOT/eth.hardhat
+- hh clean
+- hh run scripts/2_deploy_contracts.js --network rinkeby
+
 ## Run the tests
 - steps to run the test require additional 2 environment variables setup
 - ETH_W1=...wallet address of deployer and _daoOwner
@@ -79,6 +93,7 @@ umber: true }
     ✓ approve and pay request - engg (38ms)
 
     9 passing (2s)
+
 
 ## Roles
 - DAO Owner - Creator & Deployer of DaoPayTreasury contract (only role that can create a worksteram & make payments in DAOT)
